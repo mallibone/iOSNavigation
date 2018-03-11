@@ -28,18 +28,23 @@ namespace iOSNavigation
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            ((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
         }
 
-        public override void WillMoveToParentViewController(UIViewController parent)
+		public override void RemoveFromParentViewController()
+		{
+            base.RemoveFromParentViewController();
+            Console.WriteLine("Method override: Going back Content");
+        }
+		public override void WillMoveToParentViewController(UIViewController parent)
         {
-            if(parent == null) Console.WriteLine("Going back Content");
+            if(parent == null) Console.WriteLine("Method override: Going back Content");
             base.WillMoveToParentViewController(parent);
         }
 
         private void ViewControllerPopped(object sender, EventArgs e)
         {
-            Console.WriteLine("Going back Content");
+            Console.WriteLine("Navigation Controller override: Going back Content");
+            ((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
         }
     }
 

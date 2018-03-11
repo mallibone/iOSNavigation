@@ -1,6 +1,7 @@
 ﻿using System;
 using PureLayout.Net;
 using UIKit;
+using System.Linq;
 
 namespace iOSNavigation
 {
@@ -26,27 +27,37 @@ namespace iOSNavigation
 
         private void ViewControllerPopped(object sender, EventArgs e)
         {
-            Console.WriteLine("Going back Shell");
+            Console.WriteLine("Navigation Controller override: Going back Shell");
         }
 
         public override void ViewDidDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            if(IsMovingFromParentViewController) Console.WriteLine("Going back Shell");
-            ((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
+            //if(IsMovingFromParentViewController) Console.WriteLine("Going back Shell");
+            // this will throw a argument null exception
+            //((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
         }
 
         public override void WillMoveToParentViewController(UIViewController parent)
         {
-            if(parent == null) Console.WriteLine("Going back Shell");
             base.WillMoveToParentViewController(parent);
+
+            if (parent == null)
+            {
+                var childVCs = ChildViewControllers;
+                foreach(var childVC in childVCs)
+                {
+                    childVC.RemoveFromParentViewController();
+                }
+
+                Console.WriteLine("Method override: Going back Shell");
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            // this will throw a argument null exception
-            //((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
+            ((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
         }
     }
 }
