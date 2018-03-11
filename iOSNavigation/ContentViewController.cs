@@ -31,6 +31,12 @@ namespace iOSNavigation
             ((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
         }
 
+        public override void WillMoveToParentViewController(UIViewController parent)
+        {
+            if(parent == null) Console.WriteLine("Going back Content");
+            base.WillMoveToParentViewController(parent);
+        }
+
         private void ViewControllerPopped(object sender, EventArgs e)
         {
             Console.WriteLine("Going back Content");

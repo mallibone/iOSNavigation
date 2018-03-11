@@ -31,9 +31,15 @@ namespace iOSNavigation
 
         public override void ViewDidDisappear(bool animated)
         {
-
             base.ViewWillDisappear(animated);
+            if(IsMovingFromParentViewController) Console.WriteLine("Going back Shell");
             ((AwareNavigationController)NavigationController).PoppedViewController -= ViewControllerPopped;
+        }
+
+        public override void WillMoveToParentViewController(UIViewController parent)
+        {
+            if(parent == null) Console.WriteLine("Going back Shell");
+            base.WillMoveToParentViewController(parent);
         }
 
         public override void ViewWillDisappear(bool animated)
